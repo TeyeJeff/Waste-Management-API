@@ -30,8 +30,8 @@ app.get('/', (req, res) => {
 // Import API Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/wasteRequests', require('./routes/wasteRequests'));
-app.use('/api/collections', require('./routes/collections'));
-app.use('/api/feedback', require('./routes/feedback'));
+//app.use('/api/collections', require('./routes/collections'));
+//app.use('/api/feedback', require('./routes/feedback'));
 
 // Centralized Error Handling Middleware
 app.use((err, req, res, next) => {
