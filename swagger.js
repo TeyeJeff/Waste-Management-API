@@ -6,7 +6,7 @@ const doc = {
     description: 'API for managing waste pickup requests, collections, and citizen feedback',
   },
   host: process.env.RENDER_EXTERNAL_HOSTNAME || 'localhost:8080',
-  schemes: ['https', 'http'],
+  schemes: ['http', 'https'],
 };
 
 const outputFile = './swagger-output.json';

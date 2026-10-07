@@ -65,7 +65,20 @@ router.put(
       .withMessage('Invalid status value'),
     validate,
   ],
-  updateWasteRequest
+  (req, res, next) => {
+    /*  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Waste request fields to update',
+            required: true,
+            schema: {
+                wasteType: "Recyclable",
+                status: "Assigned",
+                notes: "Updated pickup instructions"
+            }
+        } 
+    */
+    updateWasteRequest(req, res, next);
+  }
 );
 
 router.delete('/:id', deleteWasteRequest);

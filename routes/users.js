@@ -54,7 +54,21 @@ router.put(
     body('role').optional().isIn(['citizen', 'collector', 'admin']).withMessage('Invalid role'),
     validate,
   ],
-  updateUser
+  (req, res, next) => {
+    /*  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'User fields to update',
+            required: true,
+            schema: {
+                name: "Jeff Teye Updated",
+                email: "jeff.updated@example.com",
+                role: "citizen",
+                phone: "0249999999"
+            }
+        } 
+    */
+    updateUser(req, res, next);
+  }
 );
 
 router.delete('/:id', deleteUser);
