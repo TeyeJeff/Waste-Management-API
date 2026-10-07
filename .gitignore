@@ -1,4 +1,3 @@
 node_modules
 .env
-swagger-output.json
 .DS_Store
