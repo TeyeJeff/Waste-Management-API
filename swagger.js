@@ -5,11 +5,14 @@ const doc = {
     title: 'Waste Management API',
     description: 'API for managing waste pickup requests, collections, and citizen feedback',
   },
-  host: process.env.RENDER_EXTERNAL_HOSTNAME || 'localhost:8080',
+  // Automatically switch host depending on environment, defaulting to localhost
+  host: process.env.NODE_ENV === 'production' 
+    ? 'waste-management-api-jpaq.onrender.com' 
+    : 'localhost:8080',
   schemes: ['http', 'https'],
 };
 
 const outputFile = './swagger-output.json';
-const endpointsFiles = ['./server.js'];
+const routes = ['./server.js'];
 
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen(outputFile, routes, doc);
