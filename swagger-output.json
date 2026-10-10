@@ -5,11 +5,11 @@
     "description": "API for managing waste pickup requests, collections, and citizen feedback",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "waste-management-api-jpaq.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
     "/": {
