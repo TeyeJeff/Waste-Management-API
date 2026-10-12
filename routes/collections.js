@@ -34,7 +34,21 @@ router.post(
       .withMessage('Invalid status value'),
     validate,
   ],
-  createCollection
+  (req, res, next) => {
+    /*  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Waste collection entry details',
+            required: true,
+            schema: {
+                wasteRequestId: "650c1f1f1f1f1f1f1f1f1f1f",
+                collectorId: "650c1f1f1f1f1f1f1f1f1f1f",
+                scheduledDate: "2026-10-15T10:00:00.000Z",
+                status: "Scheduled"
+            }
+        } 
+    */
+    createCollection(req, res, next);
+  }
 );
 
 router.put(
@@ -47,7 +61,19 @@ router.put(
       .withMessage('Invalid status value'),
     validate,
   ],
-  updateCollection
+  (req, res, next) => {
+    /*  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Waste collection fields to update',
+            required: true,
+            schema: {
+                scheduledDate: "2026-10-16T12:00:00.000Z",
+                status: "Completed"
+            }
+        } 
+    */
+    updateCollection(req, res, next);
+  }
 );
 
 router.delete('/:id', deleteCollection);

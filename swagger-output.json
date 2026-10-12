@@ -303,6 +303,308 @@
           }
         }
       }
+    },
+    "/api/collections/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Waste collection entry details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "wasteRequestId": {
+                  "type": "string",
+                  "example": "650c1f1f1f1f1f1f1f1f1f1f"
+                },
+                "collectorId": {
+                  "type": "string",
+                  "example": "650c1f1f1f1f1f1f1f1f1f1f"
+                },
+                "scheduledDate": {
+                  "type": "string",
+                  "example": "2026-10-15T10:00:00.000Z"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Scheduled"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/collections/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Waste collection fields to update",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "scheduledDate": {
+                  "type": "string",
+                  "example": "2026-10-16T12:00:00.000Z"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Completed"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/feedback/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Feedback entry details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "650c1f1f1f1f1f1f1f1f1f1f"
+                },
+                "collectionId": {
+                  "type": "string",
+                  "example": "650c1f1f1f1f1f1f1f1f1f1f"
+                },
+                "rating": {
+                  "type": "number",
+                  "example": 5
+                },
+                "comments": {
+                  "type": "string",
+                  "example": "Great service and timely pickup!"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/feedback/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Feedback fields to update",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "rating": {
+                  "type": "number",
+                  "example": 4
+                },
+                "comments": {
+                  "type": "string",
+                  "example": "Updated feedback comments"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CollectionInput": {
+      "type": "object",
+      "properties": {
+        "wasteRequestId": {
+          "type": "string",
+          "example": "650c1f1f1f1f1f1f1f1f1f1f"
+        },
+        "collectorId": {
+          "type": "string",
+          "example": "650c1f1f1f1f1f1f1f1f1f1f"
+        },
+        "scheduledDate": {
+          "type": "string",
+          "example": "2026-10-15T10:00:00.000Z"
+        },
+        "status": {
+          "type": "string",
+          "example": "Scheduled"
+        }
+      }
+    },
+    "FeedbackInput": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "650c1f1f1f1f1f1f1f1f1f1f"
+        },
+        "collectionId": {
+          "type": "string",
+          "example": "650c1f1f1f1f1f1f1f1f1f1f"
+        },
+        "rating": {
+          "type": "number",
+          "example": 5
+        }
+      }
     }
   }
 }
