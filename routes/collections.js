@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
+const authenticate = require('../auth/authenticate');
 const {
   getAllCollections,
   getCollectionById,
@@ -25,6 +26,7 @@ router.get('/:id', getCollectionById);
 router.post(
   '/',
   [
+    authenticate,
     body('wasteRequestId').isMongoId().withMessage('Valid Waste Request Mongo ID is required'),
     body('collectorId').isMongoId().withMessage('Valid Collector Mongo ID is required'),
     body('scheduledDate').isISO8601().toDate().withMessage('Valid scheduled date is required'),
@@ -32,9 +34,11 @@ router.post(
       .optional()
       .isIn(['Scheduled', 'In Progress', 'Completed', 'Cancelled'])
       .withMessage('Invalid status value'),
+    body('notes').optional().isString().withMessage('Notes must be a string'),
     validate,
   ],
   (req, res, next) => {
+    /*  #swagger.security = [{ "bearerAuth": [] }] */
     /*  #swagger.parameters['body'] = {
             in: 'body',
             description: 'Waste collection entry details',
@@ -54,7 +58,16 @@ router.post(
 router.put(
   '/:id',
   [
+    authenticate,
+    body().custom((value, { req }) => {
+      const fields = Object.keys(req.body || {});
+      const allowedFields = ['wasteRequestId', 'collectorId', 'scheduledDate', 'status', 'notes'];
+      return fields.length > 0 && fields.every((field) => allowedFields.includes(field));
+    }).withMessage('Provide at least one valid field for update'),
+    body('wasteRequestId').optional().isMongoId().withMessage('Valid Waste Request Mongo ID is required'),
+    body('collectorId').optional().isMongoId().withMessage('Valid Collector Mongo ID is required'),
     body('scheduledDate').optional().isISO8601().toDate().withMessage('Valid scheduled date is required'),
+    body('notes').optional().isString().withMessage('Notes must be a string'),
     body('status')
       .optional()
       .isIn(['Scheduled', 'In Progress', 'Completed', 'Cancelled'])
@@ -62,6 +75,7 @@ router.put(
     validate,
   ],
   (req, res, next) => {
+    /*  #swagger.security = [{ "bearerAuth": [] }] */
     /*  #swagger.parameters['body'] = {
             in: 'body',
             description: 'Waste collection fields to update',
@@ -76,6 +90,9 @@ router.put(
   }
 );
 
-router.delete('/:id', deleteCollection);
+router.delete('/:id', authenticate, (req, res, next) => {
+  /*  #swagger.security = [{ "bearerAuth": [] }] */
+  deleteCollection(req, res, next);
+});
 
 module.exports = router;

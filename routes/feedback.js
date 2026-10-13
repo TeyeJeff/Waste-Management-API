@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
+const authenticate = require('../auth/authenticate');
 const {
   getAllFeedback,
   getFeedbackById,
@@ -25,12 +26,15 @@ router.get('/:id', getFeedbackById);
 router.post(
   '/',
   [
+    authenticate,
     body('userId').isMongoId().withMessage('Valid User Mongo ID is required'),
     body('collectionId').isMongoId().withMessage('Valid Collection Mongo ID is required'),
     body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be an integer between 1 and 5'),
+    body('comment').optional().isString().withMessage('Comment must be a string'),
     validate,
   ],
   (req, res, next) => {
+    /*  #swagger.security = [{ "bearerAuth": [] }] */
     /*  #swagger.parameters['body'] = {
             in: 'body',
             description: 'Feedback entry details',
@@ -39,7 +43,7 @@ router.post(
                 userId: "650c1f1f1f1f1f1f1f1f1f1f",
                 collectionId: "650c1f1f1f1f1f1f1f1f1f1f",
                 rating: 5,
-                comments: "Great service and timely pickup!"
+                comment: "Great service and timely pickup!"
             }
         } 
     */
@@ -50,17 +54,27 @@ router.post(
 router.put(
   '/:id',
   [
+    authenticate,
+    body().custom((value, { req }) => {
+      const fields = Object.keys(req.body || {});
+      const allowedFields = ['userId', 'collectionId', 'rating', 'comment'];
+      return fields.length > 0 && fields.every((field) => allowedFields.includes(field));
+    }).withMessage('Provide at least one valid field for update'),
+    body('userId').optional().isMongoId().withMessage('Valid User Mongo ID is required'),
+    body('collectionId').optional().isMongoId().withMessage('Valid Collection Mongo ID is required'),
     body('rating').optional().isInt({ min: 1, max: 5 }).withMessage('Rating must be an integer between 1 and 5'),
+    body('comment').optional().isString().withMessage('Comment must be a string'),
     validate,
   ],
   (req, res, next) => {
+    /*  #swagger.security = [{ "bearerAuth": [] }] */
     /*  #swagger.parameters['body'] = {
             in: 'body',
             description: 'Feedback fields to update',
             required: true,
             schema: {
                 rating: 4,
-                comments: "Updated feedback comments"
+                comment: "Updated feedback comment"
             }
         } 
     */
@@ -68,6 +82,9 @@ router.put(
   }
 );
 
-router.delete('/:id', deleteFeedback);
+router.delete('/:id', authenticate, (req, res, next) => {
+  /*  #swagger.security = [{ "bearerAuth": [] }] */
+  deleteFeedback(req, res, next);
+});
 
 module.exports = router;

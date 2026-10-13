@@ -8,6 +8,14 @@ const doc = {
   },
   host: 'waste-management-api-jpaq.onrender.com',
   schemes: ['https', 'http'],
+  securityDefinitions: {
+    bearerAuth: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header',
+      description: 'Provide the Authorization header using the Bearer scheme.',
+    },
+  },
   definitions: {
     CollectionInput: {
       wasteRequestId: "650c1f1f1f1f1f1f1f1f1f1f",
@@ -27,5 +35,5 @@ const outputFile = './swagger-output.json';
 const routes = ['./server.js'];
 
 swaggerAutogen(outputFile, routes, doc).then(() => {
-  require('./server.js'); // ensures generation finishes
+  console.log(`Swagger documentation written to ${outputFile}`);
 });

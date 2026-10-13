@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
+const authenticate = require('../auth/authenticate');
 const {
   getAllWasteRequests,
   getWasteRequestById,
@@ -23,6 +24,7 @@ router.get('/:id', getWasteRequestById);
 router.post(
   '/',
   [
+    authenticate,
     body('userId').isMongoId().withMessage('Valid User Mongo ID is required'),
     body('wasteType')
       .isIn(['Organic', 'Recyclable', 'Hazardous', 'General', 'Electronic'])
@@ -35,6 +37,7 @@ router.post(
     validate,
   ],
   (req, res, next) => {
+    /*  #swagger.security = [{ "bearerAuth": [] }] */
     /*  #swagger.parameters['body'] = {
             in: 'body',
             description: 'Waste collection request details',
@@ -55,6 +58,9 @@ router.post(
 router.put(
   '/:id',
   [
+    authenticate,
+    body().custom((value, { req }) => Object.keys(req.body || {}).length > 0)
+      .withMessage('At least one field must be provided for update'),
     body('wasteType')
       .optional()
       .isIn(['Organic', 'Recyclable', 'Hazardous', 'General', 'Electronic'])
@@ -63,9 +69,12 @@ router.put(
       .optional()
       .isIn(['Pending', 'Assigned', 'Completed', 'Cancelled'])
       .withMessage('Invalid status value'),
+    body('location').optional().notEmpty().withMessage('Pickup location cannot be empty'),
+    body('notes').optional().isString().withMessage('Notes must be a string'),
     validate,
   ],
   (req, res, next) => {
+    /*  #swagger.security = [{ "bearerAuth": [] }] */
     /*  #swagger.parameters['body'] = {
             in: 'body',
             description: 'Waste request fields to update',
@@ -81,6 +90,9 @@ router.put(
   }
 );
 
-router.delete('/:id', deleteWasteRequest);
+router.delete('/:id', authenticate, (req, res, next) => {
+  /*  #swagger.security = [{ "bearerAuth": [] }] */
+  deleteWasteRequest(req, res, next);
+});
 
 module.exports = router;
