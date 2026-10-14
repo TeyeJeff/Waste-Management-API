@@ -22,7 +22,7 @@ const configureGoogleOAuth = () => {
     passport.use(new GoogleStrategy({
       clientID,
       clientSecret,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:8080/auth/google/callback',
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || 'https://waste-management-api-jpaq.onrender.com/auth/google/callback',
     }, (accessToken, refreshToken, profile, done) => done(null, profile)));
     configured = true;
   }
