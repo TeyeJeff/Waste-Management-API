@@ -75,7 +75,13 @@ router.get('/google/callback', oauthUnavailable, (req, res, next) => {
     || cookieBuffer.length !== queryBuffer.length
     || !crypto.timingSafeEqual(cookieBuffer, queryBuffer)
   ) {
-    return res.status(400).json({ success: false, message: 'OAuth state is missing or invalid' });
+    const message = !queryState
+      ? 'OAuth state is missing from the callback'
+      : !cookieState
+        ? 'OAuth state cookie was not returned by the browser; start sign-in again on this host'
+        : 'OAuth state does not match the sign-in request; start sign-in again';
+    console.warn(`Google OAuth state validation failed: ${message}`);
+    return res.status(400).json({ success: false, message });
   }
 
   passport.authenticate('google', { session: false }, (error, profile) => {
